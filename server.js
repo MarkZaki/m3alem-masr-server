@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 
 // dot env config
@@ -8,6 +9,7 @@ dotenv.config();
 // Setting
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Connect Db
 const db = process.env.DB_URI;

@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const Post = require("../models/Post");
-const User = require("../models/User");
 const AuthFunc = require("./verifyToken");
 const { newPostValidation } = require("../validation");
 
@@ -21,12 +20,8 @@ router.post("/", AuthFunc, async (req, res) => {
 	});
 	try {
 		const newPost = await post.save();
-		const user = await User.findById(req.user.id);
-		newPost["user"] = {
-			name: user.name,
-			email: user.email
-		}
-		return res.send(newPost);
+		const fetchedPost = await Post.findById(newPost._id).populate("user", "name email");
+		return res.send(fetchedPost);
 	} catch (err) {
 		res.status(400).json({ message: err });
 	}

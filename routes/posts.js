@@ -20,7 +20,7 @@ router.post("/", AuthFunc, async (req, res) => {
 	});
 	try {
 		const newPost = await post.save();
-		return res.send(newPost);
+		return res.send(newPost.populate("user", "name email"));
 	} catch (err) {
 		res.status(400).json({ message: err });
 	}

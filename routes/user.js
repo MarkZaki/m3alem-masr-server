@@ -6,10 +6,6 @@ const jwt = require("jsonwebtoken");
 const joi = require("joi");
 const { validRegister, validLogin } = require("../validation");
 
-router.get("/", (req, res) => {
-	res.send("Hello, please Login or Register!");
-});
-
 router.post("/register", async (req, res) => {
 	// Valid Form
 	const { error } = validRegister(req.body);

@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
 	try {
 		const addNewUser = await newUser.save();
 		const token = jwt.sign({ id: addNewUser.id }, process.env.SECRET_KEY);
-		return res.send({ token });
+		return res.json({ token: token, user: {_id: addNewUser._id, name: addNewUser.name, email: addNewUser.email } });
 	} catch (err) {
 		res.status(400).json({ message: err });
 	}
@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
 	if (!validPass) return res.status(400).send("Email or Password is wrong");
 	//Create and assign token
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-	return res.json({ token });
+	return res.json({ token: token, user: {_id: user._id, name: user.name, email: user.email } });
 });
 
 module.exports = router;

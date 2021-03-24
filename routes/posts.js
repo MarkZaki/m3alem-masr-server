@@ -5,7 +5,7 @@ const { newPostValidation } = require("../validation");
 
 router.get("/", AuthFunc, async (req, res) => {
 	const posts = await Post.find().populate("user", "name email");
-	return res.json(posts);
+	return res.json(posts.reverse());
 });
 
 router.post("/", AuthFunc, async (req, res) => {

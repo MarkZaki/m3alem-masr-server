@@ -51,7 +51,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/", AuthFunc, async (req, res) => {
 	// Find email
-	const user = await User.findOne({ id: req.user.id });
+	const user = await User.findById(req.user.id);
 	if (!user) return res.status(400).send("not found");
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
 	return res.json({ token: token, user: {_id: user._id, name: user.name, email: user.email } });

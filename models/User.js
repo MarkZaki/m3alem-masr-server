@@ -1,24 +1,29 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        min: 6,
-    },
-    email: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        min: 6,
-    },
-    date: {
-        type: Date,
-        default: Date.now,
-    }
+	name: {
+		type: String,
+		required: true,
+		min: 6
+	},
+	email: {
+		type: String,
+		required: true
+	},
+	password: {
+		type: String,
+		required: true,
+		min: 6
+	},
+	image: {
+		type: String,
+		default:
+			"data:image/jpeg;base64,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"
+	},
+	date: {
+		type: Date,
+		default: Date.now
+	}
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

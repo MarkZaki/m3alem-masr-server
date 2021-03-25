@@ -23,12 +23,21 @@ router.post("/register", async (req, res) => {
 	const newUser = new User({
 		name: req.body.name,
 		email: req.body.email,
+		image: req.body.image,
 		password: passwordHashed
 	});
 	try {
 		const addNewUser = await newUser.save();
 		const token = jwt.sign({ id: addNewUser.id }, process.env.SECRET_KEY);
-		return res.json({ token: token, user: {_id: addNewUser._id, name: addNewUser.name, email: addNewUser.email } });
+		return res.json({
+			token: token,
+			user: {
+				_id: addNewUser._id,
+				name: addNewUser.name,
+				email: addNewUser.email,
+				image: addNewUser.image
+			}
+		});
 	} catch (err) {
 		res.status(400).json({ message: err });
 	}
@@ -46,7 +55,15 @@ router.post("/login", async (req, res) => {
 	if (!validPass) return res.status(400).send("Email or Password is wrong");
 	//Create and assign token
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-	return res.json({ token: token, user: {_id: user._id, name: user.name, email: user.email } });
+	return res.json({
+		token: token,
+		user: {
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			image: user.image
+		}
+	});
 });
 
 router.get("/", AuthFunc, async (req, res) => {
@@ -54,7 +71,15 @@ router.get("/", AuthFunc, async (req, res) => {
 	const user = await User.findById(req.user.id);
 	if (!user) return res.status(400).send("not found");
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-	return res.json({ token: token, user: {_id: user._id, name: user.name, email: user.email } });
+	return res.json({
+		token: token,
+		user: {
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			image: user.image
+		}
+	});
 });
 
 module.exports = router;

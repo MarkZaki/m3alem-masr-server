@@ -9,7 +9,7 @@ const { validRegister, validLogin } = require("../validation");
 router.post("/register", async (req, res) => {
 	// Valid Form
 	const { error } = validRegister(req.body);
-	if (error) return res.status(400).send(error.details[0].message);
+	if (error) return res.status(400).send({ error: error.details[0].message });
 
 	// Check already email
 	const emailExist = await User.findOne({ email: req.body.email });
@@ -28,25 +28,36 @@ router.post("/register", async (req, res) => {
 	try {
 		const addNewUser = await newUser.save();
 		const token = jwt.sign({ id: addNewUser.id }, process.env.SECRET_KEY);
-		return res.json({ token: token, user: {_id: addNewUser._id, name: addNewUser.name, email: addNewUser.email } });
+		return res.json({
+			token: token,
+			user: {
+				_id: addNewUser._id,
+				name: addNewUser.name,
+				email: addNewUser.email
+			}
+		});
 	} catch (err) {
-		res.status(400).json({ message: err });
+		res.status(400).json({ error: err });
 	}
 });
 
 router.post("/login", async (req, res) => {
 	// Basic Valid
 	const { error } = validLogin(req.body);
-	if (error) return res.status(400).send(error.details[0].message);
+	if (error) return res.status(400).send({ error: error.details[0].message });
 	// Find email
 	const user = await User.findOne({ email: req.body.email });
 	if (!user) return res.status(400).send("Email not found");
 	// Check Password
 	const validPass = await bcrypt.compare(req.body.password, user.password);
-	if (!validPass) return res.status(400).send("Email or Password is wrong");
+	if (!validPass)
+		return res.status(400).send({ error: "Email or Password is wrong" });
 	//Create and assign token
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-	return res.json({ token: token, user: {_id: user._id, name: user.name, email: user.email } });
+	return res.json({
+		token: token,
+		user: { _id: user._id, name: user.name, email: user.email }
+	});
 });
 
 router.get("/", AuthFunc, async (req, res) => {
@@ -54,7 +65,10 @@ router.get("/", AuthFunc, async (req, res) => {
 	const user = await User.findById(req.user.id);
 	if (!user) return res.status(400).send("not found");
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-	return res.json({ token: token, user: {_id: user._id, name: user.name, email: user.email } });
+	return res.json({
+		token: token,
+		user: { _id: user._id, name: user.name, email: user.email }
+	});
 });
 
 module.exports = router;

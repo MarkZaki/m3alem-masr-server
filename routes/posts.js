@@ -10,7 +10,7 @@ router.get("/", AuthFunc, async (req, res) => {
 
 router.post("/", AuthFunc, async (req, res) => {
 	const { error } = newPostValidation(req.body);
-	if (error) return res.status(400).send(error.details[0].message);
+	if (error) return res.status(400).send({ error: error.details[0].message });
 	const post = new Post({
 		info: req.body.info,
 		position: req.body.position,
@@ -20,10 +20,13 @@ router.post("/", AuthFunc, async (req, res) => {
 	});
 	try {
 		const newPost = await post.save();
-		const fetchedPost = await Post.findById(newPost._id).populate("user", "name email");
+		const fetchedPost = await Post.findById(newPost._id).populate(
+			"user",
+			"name email"
+		);
 		return res.send(fetchedPost);
 	} catch (err) {
-		res.status(400).json({ message: err });
+		res.status(400).json({ error: err });
 	}
 });
 
@@ -36,7 +39,7 @@ router.put("/", AuthFunc, async (req, res) => {
 
 	const post = await Post.findById(postId);
 
-	if (!post) res.status(401).send({ err: "Something went wrong!" });
+	if (!post) res.status(401).send({ error: "Something went wrong!" });
 
 	const oldVoteList = post[voteType];
 	const oldOtherList = post[otherType];

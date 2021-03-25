@@ -4,8 +4,9 @@ const AuthFunc = require("./verifyToken");
 const { newPostValidation } = require("../validation");
 
 router.get("/", AuthFunc, async (req, res) => {
-	const posts = await Post.find().populate("user", "name email");
-	return res.json(posts.reverse());
+	const posts = await Post.find().populate("user", "name email image");
+	if (posts) return res.json(posts.reverse());
+	else return res.json([]);
 });
 
 router.post("/", AuthFunc, async (req, res) => {

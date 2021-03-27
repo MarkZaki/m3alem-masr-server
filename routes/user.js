@@ -80,7 +80,6 @@ router.post("/profile", AuthFunc, async (req, res) => {
 		"user",
 		"name email image"
 	);
-	Post.f;
 	return res.json({
 		user: user,
 		posts: posts ? posts : []

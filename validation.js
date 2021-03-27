@@ -4,7 +4,7 @@ const validRegister = props => {
 	const valid = {
 		name: joi.string().min(6).required(),
 		email: joi.string().min(6).required().email(),
-		image: joi.string(),
+		image: joi.string().allow(null, ''),
 		password: joi.string().min(6).required()
 	};
 	const schema = joi.object(valid);

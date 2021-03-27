@@ -9,7 +9,7 @@ router.get("/", AuthFunc, async (req, res) => {
 		return res.json(
 			posts.sort(
 				(a, b) =>
-					a.ups.length - a.downs.length - (b.ups.length - b.downs.length)
+					b.ups.length - b.downs.length - (a.ups.length - a.downs.length)
 			)
 		);
 	else return res.json([]);

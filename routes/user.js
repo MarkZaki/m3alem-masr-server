@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
+const Post = require("../models/Post");
 const bcrypt = require("bcryptjs");
 const AuthFunc = require("./verifyToken");
 const jwt = require("jsonwebtoken");
@@ -13,8 +14,7 @@ router.post("/register", async (req, res) => {
 
 	// Check already email
 	const emailExist = await User.findOne({ email: req.body.email });
-	if (emailExist)
-		return res.status(400).send({ error: "email already exist" });
+	if (emailExist) return res.status(400).send({ error: "email already exist" });
 
 	//Hash password
 	const salt = await bcrypt.genSalt(10);
@@ -69,6 +69,21 @@ router.get("/", AuthFunc, async (req, res) => {
 	return res.json({
 		token: token,
 		user: { _id: user._id, name: user.name, email: user.email }
+	});
+});
+
+router.get("/profile", AuthFunc, async (req, res) => {
+	// Find email
+	const user = await User.findById(req.body.id).select("-password");
+	if (!user) return res.status(400).send({ error: "Not Found!" });
+	const posts = await Post.find({ user: req.body.id }).populate(
+		"user",
+		"name email image"
+	);
+	Post.f;
+	return res.json({
+		user: user,
+		posts: posts ? posts : []
 	});
 });
 

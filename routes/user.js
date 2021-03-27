@@ -20,10 +20,15 @@ router.post("/register", async (req, res) => {
 	const salt = await bcrypt.genSalt(10);
 	const passwordHashed = await bcrypt.hash(req.body.password, salt);
 
+	const image = req.body.image;
+
 	const newUser = new User({
 		name: req.body.name,
 		email: req.body.email,
-		image: req.body.image.trim() == "" ? null : req.body.image,
+		image:
+			image.length < 1
+				? "https://m3alem-masr.herokuapp.com/images/default.webp"
+				: req.body.image,
 		password: passwordHashed
 	});
 	try {

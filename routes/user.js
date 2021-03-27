@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
 		name: req.body.name,
 		email: req.body.email,
 		image:
-			image.length < 1
+			image.length < 1 || image == null
 				? "https://m3alem-masr.herokuapp.com/images/default.webp"
 				: req.body.image,
 		password: passwordHashed

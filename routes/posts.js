@@ -23,7 +23,7 @@ router.post("/", AuthFunc, async (req, res) => {
 		const newPost = await post.save();
 		const fetchedPost = await Post.findById(newPost._id).populate(
 			"user",
-			"name email"
+			"name email image"
 		);
 		return res.send(fetchedPost);
 	} catch (err) {

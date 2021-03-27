@@ -34,6 +34,7 @@ router.post("/register", async (req, res) => {
 			user: {
 				_id: addNewUser._id,
 				name: addNewUser.name,
+				image: addNewUser.image,
 				email: addNewUser.email
 			}
 		});
@@ -57,7 +58,12 @@ router.post("/login", async (req, res) => {
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
 	return res.json({
 		token: token,
-		user: { _id: user._id, name: user.name, email: user.email }
+		user: {
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			image: user.image
+		}
 	});
 });
 
@@ -68,7 +74,12 @@ router.get("/", AuthFunc, async (req, res) => {
 	const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
 	return res.json({
 		token: token,
-		user: { _id: user._id, name: user.name, email: user.email }
+		user: {
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			image: user.image
+		}
 	});
 });
 

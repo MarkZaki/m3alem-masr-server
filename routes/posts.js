@@ -5,7 +5,13 @@ const { newPostValidation } = require("../validation");
 
 router.get("/", AuthFunc, async (req, res) => {
 	const posts = await Post.find().populate("user", "name email image");
-	if (posts) return res.json(posts.reverse());
+	if (posts)
+		return res.json(
+			posts.sort(
+				(a, b) =>
+					a.ups.length - a.downs.length - (b.ups.length - b.downs.length)
+			)
+		);
 	else return res.json([]);
 });
 

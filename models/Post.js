@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 const postSchema = mongoose.Schema({
 	info: {
 		type: String,
-		required: true
+		required: true,
+		trim: true
 	},
 	position: {
 		type: String,
-		required: true
+		required: true,
+		trim: true
 	},
 	ups: { type: Array, default: [] },
 	downs: { type: Array, default: [] },

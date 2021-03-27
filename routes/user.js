@@ -72,7 +72,7 @@ router.get("/", AuthFunc, async (req, res) => {
 	});
 });
 
-router.get("/profile", AuthFunc, async (req, res) => {
+router.post("/profile", AuthFunc, async (req, res) => {
 	// Find email
 	const user = await User.findById(req.body.id).select("-password");
 	if (!user) return res.status(400).send({ error: "Not Found!" });

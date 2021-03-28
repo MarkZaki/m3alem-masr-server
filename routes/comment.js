@@ -9,8 +9,7 @@ router.post("/", AuthFunc, async (req, res) => {
 		"user",
 		"name email image"
 	);
-	if (comments)
-		return res.json(comments.sort((a, b) => b.likes.length - a.likes.length));
+	if (comments) return res.json(comments);
 	else return res.json([]);
 });
 

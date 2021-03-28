@@ -23,6 +23,7 @@ mongoose.connect(
 // Routes
 app.use("/api/users", require("./routes/user"));
 app.use("/api/posts", require("./routes/posts"));
+app.use("/api/comments", require("./routes/comment"));
 
 // Run Server
 const PORT = process.env.PORT || 5000;

@@ -6,7 +6,6 @@ const commentSchema = mongoose.Schema({
 		required: true,
 		trim: true
 	},
-	likes: { type: Array, default: [] },
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User"

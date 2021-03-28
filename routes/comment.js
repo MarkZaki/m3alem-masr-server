@@ -35,34 +35,4 @@ router.post("/add", AuthFunc, async (req, res) => {
 	}
 });
 
-router.put("/", AuthFunc, async (req, res) => {
-	const commentId = req.body.id;
-	const userId = req.user.id;
-
-	const comment = await Comment.findById(commentId);
-
-	if (!comment) res.status(401).send({ error: "Something went wrong!" });
-
-	const likes = comment.likes;
-
-	if (!likes.includes(userId)) {
-		likes.push(userId);
-	} else {
-		for (let i = 0; i < likes.length; i++) {
-			if (likes[i] === userId) {
-				likes.splice(i, 1);
-			}
-		}
-	}
-
-	const updatedComment = await Comment.findByIdAndUpdate(
-		{ _id: commentId },
-		{
-			likes: likes
-		},
-		{ new: true }
-	);
-	return res.send(updatedComment);
-});
-
 module.exports = router;

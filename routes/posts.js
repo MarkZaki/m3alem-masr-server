@@ -6,12 +6,7 @@ const { newPostValidation } = require("../validation");
 router.get("/", AuthFunc, async (req, res) => {
 	const posts = await Post.find().populate("user", "name email image");
 	if (posts)
-		return res.json(
-			posts.sort(
-				(a, b) =>
-					b.ups.length - b.downs.length - (a.ups.length - a.downs.length)
-			)
-		);
+		return res.json(posts.sort((a, b) => b.likes.length - a.likes.length));
 	else return res.json([]);
 });
 
@@ -22,8 +17,7 @@ router.post("/", AuthFunc, async (req, res) => {
 		info: req.body.info,
 		position: req.body.position,
 		user: req.user.id,
-		ups: [],
-		downs: []
+		likes: []
 	});
 	try {
 		const newPost = await post.save();
@@ -41,31 +35,26 @@ router.put("/", AuthFunc, async (req, res) => {
 	const postId = req.body.id;
 	const userId = req.user.id;
 
-	const voteType = req.body.vote_type;
-	const otherType = voteType === "ups" ? "downs" : "ups";
-
 	const post = await Post.findById(postId);
 
 	if (!post) res.status(401).send({ error: "Something went wrong!" });
 
-	const oldVoteList = post[voteType];
-	const oldOtherList = post[otherType];
+	const likes = post.likes;
 
-	if (!oldVoteList.includes(userId)) {
-		oldVoteList.push(userId);
+	if (!likes.includes(userId)) {
+		likes.push(userId);
 	} else {
-		oldVoteList.splice(userId);
-	}
-
-	if (oldOtherList.includes(userId)) {
-		oldOtherList.splice(userId);
+		for (let i = 0; i < likes.length; i++) {
+			if (likes[i] === userId) {
+				likes.splice(i, 1);
+			}
+		}
 	}
 
 	const updatedPost = await Post.findByIdAndUpdate(
 		{ _id: postId },
 		{
-			[voteType]: oldVoteList,
-			[otherType]: oldOtherList
+			likes: likes
 		},
 		{ new: true }
 	);

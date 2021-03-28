@@ -31,7 +31,8 @@ const newPostValidation = props => {
 
 const newCommentValidation = props => {
 	const valid = {
-		text: joi.string().required()
+		text: joi.string().required(),
+		post: joi.string().required()
 	};
 	const schema = joi.object(valid);
 	return schema.validate(props);

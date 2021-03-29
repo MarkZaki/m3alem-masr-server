@@ -11,6 +11,10 @@ const postSchema = mongoose.Schema({
 		required: true,
 		trim: true
 	},
+	image: {
+		type: String,
+		trim: true
+	},
 	likes: { type: Array, default: [] },
 	user: {
 		type: mongoose.Schema.Types.ObjectId,

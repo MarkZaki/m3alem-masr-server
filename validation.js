@@ -23,7 +23,8 @@ const validLogin = props => {
 const newPostValidation = props => {
 	const valid = {
 		info: joi.string().required(),
-		position: joi.string().required()
+		position: joi.string().required(),
+		image: joi.string().allow(null, "")
 	};
 	const schema = joi.object(valid);
 	return schema.validate(props);

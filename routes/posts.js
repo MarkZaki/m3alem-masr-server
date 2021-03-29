@@ -13,9 +13,12 @@ router.get("/", AuthFunc, async (req, res) => {
 router.post("/", AuthFunc, async (req, res) => {
 	const { error } = newPostValidation(req.body);
 	if (error) return res.status(400).send({ error: error.details[0].message });
+	let image = req.body.image;
+	image = image.trim();
 	const post = new Post({
 		info: req.body.info,
 		position: req.body.position,
+		image: image.length < 1 || image == null ? null : req.body.image,
 		user: req.user.id,
 		likes: []
 	});
